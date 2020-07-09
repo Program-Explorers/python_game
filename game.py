@@ -24,22 +24,35 @@ class player(object):
         self.left = False
         self.right = False
         self.walk_count = 0
-
+        self.standing = True
     def draw(self,root):
         if self.walk_count + 1 >= 27:
             self.walk_count = 0
+        if not(self.standing):
 
-        if self.left:
-            root.blit(walkLeft[self.walk_count // 3], (self.x, self.y))
-            man.walk_count += 1
+            if self.left:
+                root.blit(walkLeft[self.walk_count // 3], (self.x, self.y))
+                man.walk_count += 1
 
-        elif man.right:
-            root.blit(walkRight[self.walk_count // 3], (self.x, self.y))
-            self.walk_count += 1
-
+            elif man.right:
+                root.blit(walkRight[self.walk_count // 3], (self.x, self.y))
+                self.walk_count += 1
         else:
-            root.blit(char, (self.x, self.y))
-
+            if self.right:
+                root.blit(walkRight[0], (self.x, self.y))
+            else:
+                root.blit(walkLeft[0], (self.x, self.y))
+class projectile(object):
+    def _init_(self, x ,y, radius, color, facing):
+        self.x = x
+        self.y = y 
+        self.radius = radius
+        self.color = color
+        self.facing = facing
+        self.vel = 0 * facing
+    def draw(root):
+        pygame.draw.circle(root, self.color, (self.x, self.y), self.radius)
+        
 
 def draw_game():
     global walk_count
@@ -65,15 +78,14 @@ while run:
         man.x -= man.vel
         man.left = True
         man.right = False
-
+        man.standing = False
     elif keys[pygame.K_RIGHT] and man.x < 500 - man.width - man.vel:
         man.x += man.vel
         man.left = False
         man.right = True
-
+        man.standing = False
     else:
-        man.right = False
-        man.left = False
+        man.standing = True
         man.walk_count = 0
 
     if not man.is_jump:
