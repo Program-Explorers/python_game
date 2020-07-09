@@ -12,41 +12,44 @@ char = pygame.image.load('standing.png')
 
 clock = pygame.time.Clock()
 
-x = 50
-y = 400
+class player(object):
+    def __init__(self, x, y, width, height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.vel = 5
+        self.is_jump = False
+        self.jump_count = 10
+        self.left = False
+        self.right = False
+        self.walk_count = 0
 
-width = 64
-height = 64
-vel = 5
+    def draw(self, root):
+        if self.walk_count + 1 >= 27:
+            self.walk_count = 0
 
-is_jump = False
-jump_count = 10
+        if self.left:
+            root.blit(walkLeft[self.walk_count // 3], (self.x, self.y))
+            man.walk_count += 1
 
-left = False
-right = False
-walk_count = 0
+        elif man.right:
+            root.blit(walkRight[self.walk_count // 3], (self.x, self.y))
+            self.walk_count += 1
+
+        else:
+            root.blit(char, (self.x, self.y))
 
 
 def draw_game():
     global walk_count
 
     root.blit(bg, (0, 0))
-
-    if walk_count + 1 >= 27:
-        walk_count = 0
-
-    if left:
-        root.blit(walkLeft[walk_count//3], (x,y))
-        walk_count +=1
-
-    elif right:
-        root.blit(walkRight[walk_count//3], (x,y))
-        walk_count +=1
-
-    else:
-        root.blit(char, (x, y))
+    man.draw(root)
     pygame.display.update()
 
+
+man = player(300, 410, 64, 64)
 
 run = True
 while run:
@@ -58,42 +61,42 @@ while run:
 
     keys = pygame.key.get_pressed()
 
-    if keys[pygame.K_LEFT] and x > vel:
-        x -= vel
-        left = True
-        right = False
+    if keys[pygame.K_LEFT] and man.x > man.vel:
+        man.x -= man.vel
+        man.left = True
+        man.right = False
 
-    elif keys[pygame.K_RIGHT] and x < 500 - width - vel:
-        x += vel
-        left = False
-        right = True
+    elif keys[pygame.K_RIGHT] and man.x < 500 - man.width - man.vel:
+        man.x += man.vel
+        man.left = False
+        man.right = True
 
     else:
-        right = False
-        left = False
-        walk_count = 0
+        man.right = False
+        man.left = False
+        man.walk_count = 0
 
-    if not is_jump:
+    if not man.is_jump:
         if keys[pygame.K_SPACE]:
-            is_jump = True
-            right = False
-            left = False
+            man.is_jump = True
+            man.right = False
+            man.left = False
 
         elif keys[pygame.K_UP]:
-            is_jump = True
-            right = False
-            left = False
+            man.is_jump = True
+            man.right = False
+            man.left = False
     else:
-        if jump_count >= -10:
+        if man.jump_count >= -10:
             neg = 1
-            if jump_count < 0:
+            if man.jump_count < 0:
                 neg = -1
-            y -= (jump_count ** 2) * 0.5 * neg
-            jump_count -= 1
+            man.y -= (man.jump_count ** 2) * 0.5 * neg
+            man.jump_count -= 1
 
         else:
-            is_jump = False
-            jump_count = 10
+            man.is_jump = False
+            man.jump_count = 10
 
     draw_game()
 
