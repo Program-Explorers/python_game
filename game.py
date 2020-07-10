@@ -146,7 +146,7 @@ while run:
 
     if shootLoop > 0:
         shootLoop +=1 
-    elif shootLoop > 3:
+    if shootLoop > 3:
         shootLoop = 0
 
     for event in pygame.event.get():
