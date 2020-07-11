@@ -118,7 +118,9 @@ class enemy(object):
             self.hitbox = (self.x + 17, self.y + 2, 31, 57)
             #pygame.draw.rect(root, (255, 0, 0), self.hitbox, 2)
     def hit(self):
-        self.x = 60
+        self.isJump = False
+        self.jumpCount = 10
+        self.x = 100
         self.y = 410
         self.walkCount = 0
         font1 = pygame.font.SysFont('comicsans', 100)
@@ -163,7 +165,7 @@ class enemy(object):
 def draw_game():
     root.blit(bg, (0, 0))
     text = font.render('Score: ' + str(score), 1, (0, 0, 0))
-    root.blit(text, (390, 10))
+    root.blit(text, (350, 10))
     man.draw(root)
     goblin.draw(root)
 
@@ -181,10 +183,11 @@ bullets = []
 run = True
 while run:
     clock.tick(27)
-    if man.hitbox[1] < goblin.hitbox[1] + goblin.hitbox[3] and man.hitbox[1] + man.hitbox[3] > goblin.hitbox[1]:
-        if man.hitbox[0] + man.hitbox[2] > goblin.hitbox[0] and man.hitbox[0] < goblin.hitbox[0] + goblin.hitbox[2]:
-            man.hit()
-            score -=5
+    if goblin.visible == True:
+        if man.hitbox[1] < goblin.hitbox[1] + goblin.hitbox[3] and man.hitbox[1] + man.hitbox[3] > goblin.hitbox[1]:
+            if man.hitbox[0] + man.hitbox[2] > goblin.hitbox[0] and man.hitbox[0] < goblin.hitbox[0] + goblin.hitbox[2]:
+                man.hit()
+                score -=5
     if shootLoop > 0:
         shootLoop += 1
     if shootLoop > 3:
