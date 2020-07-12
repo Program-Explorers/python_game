@@ -62,6 +62,25 @@ class player(object):
         self.hitbox = (self.x + 17, self.y + 11, 29, 52)
         #pygame.draw.rect(root, (255, 0, 0), self.hitbox, 2)
 
+    def hit(self):
+        self.isJump = False
+        self.jumpCount = 10
+        self.x = 100
+        self.y = 410
+        self.walkCount = 0
+        font1 = pygame.font.SysFont('comicsans', 100)
+        text = font1.render('-5', 1, (255, 0, 0))
+        root.blit(text, (250 - (text.get_width() / 2), 200))
+        pygame.display.update()
+        i = 0
+        while i < 200:
+            pygame.time.delay(10)
+            i += 1
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    i = 201
+                    pygame.quit()
+
 
 class projectile(object):
     def __init__(self, x, y, radius, color, facing):
